@@ -1,7 +1,7 @@
-import 'package:expense_management_app/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/expense.dart';
+import '../models/category.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   const AddExpenseScreen({super.key});
@@ -12,11 +12,12 @@ class AddExpenseScreen extends StatefulWidget {
 
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-
+  final _title = TextEditingController();
+  final _amount = TextEditingController();
+  final _description = TextEditingController();
+  DateTime _date = DateTime.now();
   Category? _selectedCategory;
-  DateTime _selectedDate = DateTime.now();
+  String? _subcategory;
 
   @override
   void initState() {
@@ -27,18 +28,18 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     }
   }
 
-  void _saveExpense() {
-    if (_formKey.currentState!.validate() && _selectedCategory != null) {
-      final expense = Expense(
-        title: _titleController.text,
-        amount: double.parse(_amountController.text),
-        date: _selectedDate,
-        category: _selectedCategory!.name,
-      );
-
-      Hive.box<Expense>('expenses').add(expense);
-      Navigator.pop(context);
-    }
+  void _save() {
+    if (!_formKey.currentState!.validate() || _selectedCategory == null) return;
+    final expense = Expense(
+      title: _title.text,
+      amount: double.parse(_amount.text),
+      date: _date,
+      category: _selectedCategory!.name,
+      subcategory: _subcategory ?? '',
+      description: _description.text,
+    );
+    Hive.box<Expense>('expenses').add(expense);
+    Navigator.pop(context);
   }
 
   @override
@@ -48,73 +49,42 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Add Expense')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (value) =>
-                    value!.isEmpty ? 'Please enter a title' : null,
+          child: ListView(children: [
+            TextFormField(controller: _title, decoration: const InputDecoration(labelText: 'Title'), validator: (val) => val!.isEmpty ? 'Required' : null),
+            TextFormField(controller: _amount, keyboardType: TextInputType.number, decoration: const InputDecoration(labelText: 'Amount'), validator: (val) => val!.isEmpty ? 'Required' : null),
+            DropdownButtonFormField<Category>(
+              value: _selectedCategory,
+              decoration: const InputDecoration(labelText: 'Category'),
+              items: categories.map((c) => DropdownMenuItem(value: c, child: Row(children: [Icon(c.icon), const SizedBox(width: 8), Text(c.name)]))).toList(),
+              onChanged: (val) {
+                setState(() {
+                  _selectedCategory = val;
+                  _subcategory = null;
+                });
+              },
+            ),
+            if (_selectedCategory != null && _selectedCategory!.subcategories.isNotEmpty)
+              DropdownButtonFormField<String>(
+                value: _subcategory,
+                decoration: const InputDecoration(labelText: 'Subcategory'),
+                items: _selectedCategory!.subcategories.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                onChanged: (val) => setState(() => _subcategory = val),
               ),
-              TextFormField(
-                controller: _amountController,
-                decoration: const InputDecoration(labelText: 'Amount'),
-                keyboardType: TextInputType.number,
-                validator: (value) =>
-                    value!.isEmpty ? 'Enter an amount' : null,
-              ),
-              DropdownButtonFormField<Category>(
-                value: _selectedCategory,
-                decoration: const InputDecoration(labelText: 'Category'),
-                items: categories.map((cat) {
-                  return DropdownMenuItem(
-                    value: cat,
-                    child: Row(
-                      children: [
-                        Icon(cat.icon, size: 18),
-                        const SizedBox(width: 8),
-                        Text(cat.name),
-                      ],
-                    ),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() => _selectedCategory = val);
-                  }
-                },
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Text("Date: ${_selectedDate.toLocal()}".split(' ')[0]),
-                  const Spacer(),
-                  TextButton(
-                    child: const Text('Pick Date'),
-                    onPressed: () async {
-                      final picked = await showDatePicker(
-                        context: context,
-                        initialDate: _selectedDate,
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime.now(),
-                      );
-                      if (picked != null) {
-                        setState(() => _selectedDate = picked);
-                      }
-                    },
-                  ),
-                ],
-              ),
+            TextFormField(controller: _description, decoration: const InputDecoration(labelText: 'Description (optional)')),
+            Row(children: [
+              Text('Date: ${_date.toLocal()}'.split(' ')[0]),
               const Spacer(),
-              ElevatedButton(
-                onPressed: _saveExpense,
-                child: const Text('Save'),
-              ),
-            ],
-          ),
+              TextButton(onPressed: () async {
+                final picked = await showDatePicker(context: context, initialDate: _date, firstDate: DateTime(2020), lastDate: DateTime.now());
+                if (picked != null) setState(() => _date = picked);
+              }, child: const Text('Pick Date'))
+            ]),
+            const SizedBox(height: 16),
+            FilledButton(onPressed: _save, child: const Text('Save Expense'))
+          ]),
         ),
       ),
     );

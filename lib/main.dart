@@ -31,7 +31,7 @@ void createDefaultCategories() {
     for (final cat in defaultCategories) {
       box.add(cat);
     }
-    print(Hive.box('categories'));
+    print(box.values);
   }
 }
 

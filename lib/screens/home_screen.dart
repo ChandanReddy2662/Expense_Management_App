@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   );
 
-              final spent = box.values
+              final spent = (box).values
                   .where((e) => e.category == category.name)
                   .fold(0.0, (sum, e) => sum + e.amount);
 
