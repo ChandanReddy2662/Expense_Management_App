@@ -42,6 +42,15 @@ class HomeScreen extends StatelessWidget {
                 // icon: category.icon,
                 // overBudget: isOverBudget,
                 onDelete: () => box.deleteAt(index),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AddExpenseScreen(
+                      existingExpense: expense,
+                      index: index,
+                    ),
+                  ),
+                ),
               );
             },
           );

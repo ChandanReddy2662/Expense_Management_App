@@ -29,4 +29,46 @@ class Expense extends HiveObject {
     this.subcategory = '',
     this.description = '',
   });
+
+  factory Expense.fromMap(Map<String, dynamic> map) {
+    return Expense(
+      title: map['title'],
+      amount: (map['amount'] ?? 0).toDouble(),
+      date: DateTime.parse(map['date']),
+      category: map['category'],
+      subcategory: map['subcategory'],
+      description: map['description'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'amount': amount,
+      'date': date.toIso8601String(),
+      'category': category,
+      'subcategory': subcategory,
+      'description': description,
+    };
+  }
 }
+
+// extension ExpenseMapper on Expense {
+//   Map<String, dynamic> toMap() => {
+//         'title': title,
+//         'amount': amount,
+//         'date': date.toIso8601String(),
+//         'category': category,
+//         'subcategory': subcategory,
+//         'description': description,
+//       };
+
+//   static Expense fromMap(Map<String, dynamic> map) => Expense(
+//         title: map['title'],
+//         amount: map['amount'],
+//         date: DateTime.parse(map['date']),
+//         category: map['category'],
+//         subcategory: map['subcategory'],
+//         description: map['description'],
+//       );
+// }

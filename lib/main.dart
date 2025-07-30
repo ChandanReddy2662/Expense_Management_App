@@ -1,5 +1,6 @@
 import 'package:expense_management_app/screens/analytics_screen.dart';
 import 'package:expense_management_app/screens/category_manager_screen.dart';
+import 'package:expense_management_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/expense.dart';
@@ -49,16 +50,14 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const CategoryManagerScreen(),
+    const ProfileScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Expense Manager',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.teal,
-      ),
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.teal),
       home: Scaffold(
         body: _screens[_selectedIndex],
         bottomNavigationBar: NavigationBar(
@@ -69,10 +68,7 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
             });
           },
           destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.list),
-              label: 'Expenses',
-            ),
+            NavigationDestination(icon: Icon(Icons.list), label: 'Expenses'),
             NavigationDestination(
               icon: Icon(Icons.pie_chart),
               label: 'Analytics',
@@ -81,10 +77,13 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
               icon: Icon(Icons.category),
               label: 'Categories',
             ),
+            NavigationDestination(
+              icon: Icon(Icons.person_pin),
+              label: "Profile",
+            ),
           ],
         ),
       ),
     );
   }
 }
-
