@@ -52,7 +52,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       amount: double.parse(_amount.text),
       date: _date,
       category: _selectedCategory!.name,
-      subcategory: _subcategory ?? '',
+      subcategory: _subcategory ?? ((_selectedCategory!.subcategories.isNotEmpty)?_selectedCategory!.subcategories.first : ''),
       description: _description.text,
     );
 

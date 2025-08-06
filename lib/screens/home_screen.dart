@@ -17,10 +17,13 @@ class HomeScreen extends StatelessWidget {
         valueListenable: box.listenable(),
         builder: (context, Box<Expense> box, _) {
           if (box.isEmpty) return const Center(child: Text('No expenses yet.'));
+          final expenses = box.toMap().entries.toList();
+          expenses.sort((a, b) => b.value.date.compareTo(a.value.date));
           return ListView.builder(
             itemCount: box.length,
             itemBuilder: (context, index) {
-              final expense = box.getAt(index)!;
+              final expense = expenses[index].value;
+              final key = expenses[index].key;
               print(expense.category);
               final category = Hive.box<Category>('categories').values
                   .firstWhere(
@@ -41,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                 expense: expense,
                 // icon: category.icon,
                 // overBudget: isOverBudget,
-                onDelete: () => box.deleteAt(index),
+                onDelete: () => box.delete(key),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(

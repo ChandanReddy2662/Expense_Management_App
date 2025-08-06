@@ -19,7 +19,7 @@ class Category extends HiveObject {
   Category({
     required this.name,
     required this.iconCode,
-    this.budget = 0,
+    this.budget = 0.0,
     this.subcategories = const [],
   });
 
