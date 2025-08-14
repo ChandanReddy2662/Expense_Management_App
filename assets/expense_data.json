@@ -1,0 +1,1878 @@
+{
+  "categories": [
+    {
+      "name": "General",
+      "iconCode": 57672,
+      "budget": 0.0,
+      "subcategories": []
+    },
+    {
+      "name": "Food",
+      "iconCode": 57946,
+      "budget": 0.0,
+      "subcategories": ["Lunch", "Junk", "Tiffin", "Fruits", "Sweets", "Dinner"]
+    },
+    {
+      "name": "Travel",
+      "iconCode": 58007,
+      "budget": 0.0,
+      "subcategories": ["Auto", "Metro", "Public Transport", "Cab"]
+    },
+    {
+      "name": "Shopping",
+      "iconCode": 58778,
+      "budget": 0.0,
+      "subcategories": []
+    },
+    { "name": "Bills", "iconCode": 58636, "budget": 0.0, "subcategories": [] },
+    {
+      "name": "Entertainment",
+      "iconCode": 58636,
+      "budget": 0.0,
+      "subcategories": ["Friends", "Trip"]
+    },
+    {
+      "name": "Loaning",
+      "iconCode": 58707,
+      "budget": 0.0,
+      "subcategories": ["Friends"]
+    },
+    {
+      "name": "Home",
+      "iconCode": 57672,
+      "budget": 0.0,
+      "subcategories": ["Medicine", "Needs", "Sri Allowance", "Gifts"]
+    },
+    {
+      "name": "Others",
+      "iconCode": 58636,
+      "budget": 0.0,
+      "subcategories": ["Misc"]
+    }
+  ],
+  "expenses": [
+    {
+      "title": "Biryani",
+      "amount": 495.0,
+      "date": "2025-08-03T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Dinner",
+      "description": ""
+    },
+    {
+      "title": "KFC",
+      "amount": 509.0,
+      "date": "2025-07-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Metro pass",
+      "amount": 1380.0,
+      "date": "2025-07-22T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Inter meet up",
+      "amount": 421.0,
+      "date": "2025-07-27T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto(Movie)",
+      "amount": 84.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffins",
+      "amount": 150.0,
+      "date": "2025-07-20T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Friends meet up",
+      "amount": 515.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Biryani",
+      "amount": 350.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Mandi",
+      "amount": 220.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 40.0,
+      "date": "2025-07-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Maggi(krish and ACR)",
+      "amount": 120.0,
+      "date": "2025-07-02T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-03T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-03T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Anirudh sendoff(Airport to uppal)",
+      "amount": 350.0,
+      "date": "2025-07-04T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Public Transport",
+      "description": ""
+    },
+    {
+      "title": "Trip(BADRACHALM)",
+      "amount": 4500.0,
+      "date": "2025-07-05T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Trip",
+      "description": ""
+    },
+    {
+      "title": "Trip(gifts)",
+      "amount": 475.0,
+      "date": "2025-07-06T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Trip",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-07T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Biryani",
+      "amount": 300.0,
+      "date": "2025-07-07T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-08T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Burger king",
+      "amount": 105.0,
+      "date": "2025-07-08T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 40.0,
+      "date": "2025-07-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Chocolate ",
+      "amount": 45.0,
+      "date": "2025-07-09T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Noodles",
+      "amount": 90.0,
+      "date": "2025-07-11T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Ola",
+      "amount": 70.0,
+      "date": "2025-07-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Ola",
+      "amount": 105.0,
+      "date": "2025-07-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 40.0,
+      "date": "2025-07-14T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Egg puff",
+      "amount": 40.0,
+      "date": "2025-07-14T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-15T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 50.0,
+      "date": "2025-07-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-17T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 18.0,
+      "date": "2025-07-18T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffins",
+      "amount": 150.0,
+      "date": "2025-07-20T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-21T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 40.0,
+      "date": "2025-07-22T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-24T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-25T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-27T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-28T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-29T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Metro Pass",
+      "amount": 1380.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-30T08:54:49.405",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Fastfood(me, Tharun)",
+      "amount": 450.0,
+      "date": "2025-06-01T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 50.0,
+      "date": "2025-06-03T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Ponganalu",
+      "amount": 40.0,
+      "date": "2025-06-03T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-04T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-05T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 50.0,
+      "date": "2025-06-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffins(me,Ajith,Nihas)",
+      "amount": 240.0,
+      "date": "2025-06-08T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Nihas juice",
+      "amount": 100.0,
+      "date": "2025-06-08T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "icecream",
+      "amount": 155.0,
+      "date": "2025-06-08T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Metro(Afn)",
+      "amount": 69.0,
+      "date": "2025-06-27T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro (Mrng)",
+      "amount": 69.0,
+      "date": "2025-06-25T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-10T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-10T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-11T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Shuttle(me, mithun, nihas, Ajith, sathvik)",
+      "amount": 200.0,
+      "date": "2025-06-21T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Clg canteen",
+      "amount": 72.0,
+      "date": "2025-06-14T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Snacks(Dhruv)",
+      "amount": 167.0,
+      "date": "2025-06-14T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Frankie(me, krishna)",
+      "amount": 258.0,
+      "date": "2025-06-16T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-17T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-18T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Chocolate ",
+      "amount": 100.0,
+      "date": "2025-06-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 20.0,
+      "date": "2025-06-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Food",
+      "amount": 457.0,
+      "date": "2025-06-20T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Food(10th grp)",
+      "amount": 200.0,
+      "date": "2025-06-21T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Snack",
+      "amount": 10.0,
+      "date": "2025-06-21T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Shuttle(me, mithun, nihas, Ajith, sathvik)",
+      "amount": 300.0,
+      "date": "2025-06-21T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "KFC",
+      "amount": 355.0,
+      "date": "2025-06-22T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-23T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-24T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Food(munchriya)",
+      "amount": 60.0,
+      "date": "2025-06-25T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-26T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffin",
+      "amount": 80.0,
+      "date": "2025-06-26T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Trip(Mysore)",
+      "amount": 7500.0,
+      "date": "2025-06-28T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Trip",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-06-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "panipuri ",
+      "amount": 40.0,
+      "date": "2025-06-02T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Ola(meghana sendoff)",
+      "amount": 80.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Ola(sec-east)",
+      "amount": 32.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 56.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro ",
+      "amount": 37.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-05T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-10T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-10T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-11T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-11T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-17T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-17T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-18T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-18T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro ",
+      "amount": 69.0,
+      "date": "2025-06-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-23T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro",
+      "amount": 69.0,
+      "date": "2025-06-23T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Mrng)",
+      "amount": 69.0,
+      "date": "2025-06-24T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Metro(Evng)",
+      "amount": 69.0,
+      "date": "2025-06-24T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro ",
+      "amount": 69.0,
+      "date": "2025-06-25T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Evng)",
+      "amount": 69.0,
+      "date": "2025-06-25T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Mrng)",
+      "amount": 69.0,
+      "date": "2025-06-26T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Evng)",
+      "amount": 69.0,
+      "date": "2025-06-27T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Evng)",
+      "amount": 69.0,
+      "date": "2025-06-26T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Mrng)",
+      "amount": 69.0,
+      "date": "2025-06-27T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Trip)",
+      "amount": 47.0,
+      "date": "2025-06-27T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Trip",
+      "description": ""
+    },
+    {
+      "title": "Metro(Mrng)",
+      "amount": 69.0,
+      "date": "2025-06-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Evng)",
+      "amount": 69.0,
+      "date": "2025-06-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro(Mrng)",
+      "amount": 69.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Ola(Trip)",
+      "amount": 95.0,
+      "date": "2025-07-04T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Trip",
+      "description": ""
+    },
+    {
+      "title": "Metro(Shubham)",
+      "amount": 69.0,
+      "date": "2025-07-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Shawarma(Me, Ajith, suhas)",
+      "amount": 390.0,
+      "date": "2025-07-13T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Minnu",
+      "amount": 300.0,
+      "date": "2025-07-25T00:00:00.000",
+      "category": "Loaning",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Gowtha ",
+      "amount": 200.0,
+      "date": "2025-06-30T00:00:00.000",
+      "category": "Loaning",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-31T09:07:42.135",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 40.0,
+      "date": "2025-05-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Biryani(me, krishna, abhinav, dhruv, anirudh)",
+      "amount": 500.0,
+      "date": "2025-05-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Dinner",
+      "description": ""
+    },
+    {
+      "title": "Kova",
+      "amount": 150.0,
+      "date": "2025-05-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Sweets",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 250.0,
+      "date": "2025-05-04T00:00:00.000",
+      "category": "General",
+      "subcategory": "",
+      "description": ""
+    },
+    {
+      "title": "Movie",
+      "amount": 175.0,
+      "date": "2025-05-17T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Haircut",
+      "amount": 100.0,
+      "date": "2025-05-04T00:00:00.000",
+      "category": "General",
+      "subcategory": "",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 150.0,
+      "date": "2025-05-06T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-07T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Pvr",
+      "amount": 470.0,
+      "date": "2025-05-07T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-07-31T19:44:43.177",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-08T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Lunch",
+      "amount": 79.0,
+      "date": "2025-05-09T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Mangoes ",
+      "amount": 475.0,
+      "date": "2025-05-09T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Tiffin",
+      "amount": 150.0,
+      "date": "2025-05-10T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Chicken",
+      "amount": 250.0,
+      "date": "2025-05-11T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 20.0,
+      "date": "2025-05-11T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-12T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Lunch",
+      "amount": 8.0,
+      "date": "2025-05-12T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-13T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 40.0,
+      "date": "2025-05-13T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Onion Rings ",
+      "amount": 50.0,
+      "date": "2025-05-13T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-14T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-14T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffin",
+      "amount": 80.0,
+      "date": "2025-05-14T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-15T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Lunch",
+      "amount": 79.0,
+      "date": "2025-05-15T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Metro pass",
+      "amount": 1100.0,
+      "date": "2025-05-15T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Tiffin",
+      "amount": 80.0,
+      "date": "2025-05-16T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-16T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Ola",
+      "amount": 51.0,
+      "date": "2025-05-17T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 25.0,
+      "date": "2025-05-17T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Movie",
+      "amount": 350.0,
+      "date": "2025-05-17T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Snacks ",
+      "amount": 65.0,
+      "date": "2025-05-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Tea",
+      "amount": 35.0,
+      "date": "2025-05-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Kova",
+      "amount": 150.0,
+      "date": "2025-05-18T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Fruits",
+      "description": ""
+    },
+    {
+      "title": "Over Travel",
+      "amount": 10.0,
+      "date": "2025-05-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 35.0,
+      "date": "2025-05-20T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Metro ",
+      "amount": 5.0,
+      "date": "2025-05-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-21T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Food",
+      "amount": 160.0,
+      "date": "2025-05-21T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Over travelling ",
+      "amount": 5.0,
+      "date": "2025-05-21T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-22T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Lunch",
+      "amount": 59.0,
+      "date": "2025-05-22T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "others",
+      "amount": 60.0,
+      "date": "2025-05-23T00:00:00.000",
+      "category": "Others",
+      "subcategory": "Misc",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 60.0,
+      "date": "2025-05-24T00:00:00.000",
+      "category": "Others",
+      "subcategory": "Misc",
+      "description": ""
+    },
+    {
+      "title": "Misc",
+      "amount": 140.0,
+      "date": "2025-05-25T00:00:00.000",
+      "category": "Others",
+      "subcategory": "Misc",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 30.0,
+      "date": "2025-05-26T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-26T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Lunch",
+      "amount": 79.0,
+      "date": "2025-05-26T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Food(Me and Krisha)",
+      "amount": 315.0,
+      "date": "2025-05-26T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-27T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-28T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Snacks",
+      "amount": 50.0,
+      "date": "2025-05-28T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Egg puff",
+      "amount": 50.0,
+      "date": "2025-05-28T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 30.0,
+      "date": "2025-05-29T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-29T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Muntha masala",
+      "amount": 90.0,
+      "date": "2025-05-29T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-05-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Over Travelling ",
+      "amount": 4.0,
+      "date": "2025-05-30T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Biryani(me, krishna, abhinav, dhruv, anirudh)",
+      "amount": 500.0,
+      "date": "2025-05-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "Srinidhi",
+      "amount": 1000.0,
+      "date": "2025-05-04T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Sri Allowance",
+      "description": ""
+    },
+    {
+      "title": "Ola",
+      "amount": 243.0,
+      "date": "2025-05-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Cab",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 20.0,
+      "date": "2025-08-01T18:33:04.185",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Buspass",
+      "amount": 1400.0,
+      "date": "2025-06-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Public Transport",
+      "description": ""
+    },
+    {
+      "title": "Buspass",
+      "amount": 1450.0,
+      "date": "2025-07-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Public Transport",
+      "description": ""
+    },
+    {
+      "title": "Buspass",
+      "amount": 1430.0,
+      "date": "2025-08-01T19:20:28.432",
+      "category": "Travel",
+      "subcategory": "Public Transport",
+      "description": ""
+    },
+    {
+      "title": "medicine",
+      "amount": 335.0,
+      "date": "2025-08-02T13:08:56.064",
+      "category": "Home",
+      "subcategory": "Medicine",
+      "description": ""
+    },
+    {
+      "title": "Punugulu",
+      "amount": 30.0,
+      "date": "2025-07-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Tiffin",
+      "amount": 160.0,
+      "date": "2025-08-02T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Ice cream",
+      "amount": 140.0,
+      "date": "2025-08-02T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Dmart",
+      "amount": 885.0,
+      "date": "2025-08-02T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Biryani",
+      "amount": 230.0,
+      "date": "2025-08-03T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Dinner",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-04T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-04T18:57:42.929",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-05T22:24:46.443",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-05T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-06T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 20.0,
+      "date": "2025-08-07T13:17:39.986",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Gowtham ",
+      "amount": 800.0,
+      "date": "2025-08-07T00:00:00.000",
+      "category": "Loaning",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "chocolate ",
+      "amount": 100.0,
+      "date": "2025-08-07T18:24:08.066",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Snacks(Dhruv, me)",
+      "amount": 90.0,
+      "date": "2025-08-08T15:12:40.912",
+      "category": "Food",
+      "subcategory": "Lunch",
+      "description": ""
+    },
+    {
+      "title": "TIFFIN",
+      "amount": 210.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Tiffin(Rajesh)",
+      "amount": 105.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Petrol",
+      "amount": 1500.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Auto(Movie)",
+      "amount": 90.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 84.0,
+      "date": "2025-08-09T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Wifi",
+      "amount": 1955.0,
+      "date": "2025-08-10T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-11T19:30:38.542",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-11T19:30:54.844",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "fries",
+      "amount": 100.0,
+      "date": "2025-08-11T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Rakhi gift(Malathi, priyanka, ramya, Srinidhi)",
+      "amount": 5000.0,
+      "date": "2025-08-11T23:22:04.789",
+      "category": "Home",
+      "subcategory": "Gifts",
+      "description": ""
+    }
+  ],
+  "incomes":[
+    {
+      "source": "HDFC(Personal)",
+      "amount": 45200,
+      "isDefault": true
+    }
+  ]
+}

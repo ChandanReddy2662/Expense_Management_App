@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-
 part 'expense.g.dart';
 
 @HiveType(typeId: 0)
@@ -16,10 +15,44 @@ class Expense extends HiveObject {
   @HiveField(3)
   String category;
 
+  @HiveField(4)
+  String subcategory;
+
+  @HiveField(5)
+  String description;
+
+  @HiveField(6)
+  String? fromIncomeSource; // name of the income source
+
   Expense({
     required this.title,
     required this.amount,
     required this.date,
     required this.category,
+    this.subcategory = '',
+    this.description = '',
+    this.fromIncomeSource = '',
   });
+
+  factory Expense.fromMap(Map<String, dynamic> map) {
+    return Expense(
+      title: map['title'],
+      amount: (map['amount'] ?? 0).toDouble(),
+      date: DateTime.parse(map['date']),
+      category: map['category'],
+      subcategory: map['subcategory'],
+      description: map['description'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'amount': amount,
+      'date': date.toIso8601String(),
+      'category': category,
+      'subcategory': subcategory,
+      'description': description,
+    };
+  }
 }

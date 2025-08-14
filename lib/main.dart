@@ -1,5 +1,8 @@
+import 'package:expense_management_app/models/income.dart';
 import 'package:expense_management_app/screens/analytics_screen.dart';
 import 'package:expense_management_app/screens/category_manager_screen.dart';
+import 'package:expense_management_app/screens/income_screen.dart';
+import 'package:expense_management_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/expense.dart';
@@ -11,9 +14,11 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ExpenseAdapter());
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(IncomeAdapter());
 
   await Hive.openBox<Category>('categories');
   await Hive.openBox<Expense>('expenses');
+  await Hive.openBox<Income>('incomes');
   createDefaultCategories();
   runApp(const ExpenseManagerApp());
 }
@@ -31,7 +36,7 @@ void createDefaultCategories() {
     for (final cat in defaultCategories) {
       box.add(cat);
     }
-    print(Hive.box('categories'));
+    print(box.values);
   }
 }
 
@@ -49,16 +54,15 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const CategoryManagerScreen(),
+    const ProfileScreen(),
+    const IncomeScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Expense Manager',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.teal,
-      ),
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.teal),
       home: Scaffold(
         body: _screens[_selectedIndex],
         bottomNavigationBar: NavigationBar(
@@ -69,10 +73,7 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
             });
           },
           destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.list),
-              label: 'Expenses',
-            ),
+            NavigationDestination(icon: Icon(Icons.list), label: 'Expenses'),
             NavigationDestination(
               icon: Icon(Icons.pie_chart),
               label: 'Analytics',
@@ -81,10 +82,14 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
               icon: Icon(Icons.category),
               label: 'Categories',
             ),
+            NavigationDestination(
+              icon: Icon(Icons.person_pin),
+              label: "Profile",
+            ),
+            NavigationDestination(icon: Icon(Icons.wallet), label: "Wallet"),
           ],
         ),
       ),
     );
   }
 }
-
