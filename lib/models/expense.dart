@@ -21,6 +21,9 @@ class Expense extends HiveObject {
   @HiveField(5)
   String description;
 
+  @HiveField(6)
+  String? fromIncomeSource; // name of the income source
+
   Expense({
     required this.title,
     required this.amount,
@@ -28,6 +31,7 @@ class Expense extends HiveObject {
     required this.category,
     this.subcategory = '',
     this.description = '',
+    this.fromIncomeSource = '',
   });
 
   factory Expense.fromMap(Map<String, dynamic> map) {
@@ -52,23 +56,3 @@ class Expense extends HiveObject {
     };
   }
 }
-
-// extension ExpenseMapper on Expense {
-//   Map<String, dynamic> toMap() => {
-//         'title': title,
-//         'amount': amount,
-//         'date': date.toIso8601String(),
-//         'category': category,
-//         'subcategory': subcategory,
-//         'description': description,
-//       };
-
-//   static Expense fromMap(Map<String, dynamic> map) => Expense(
-//         title: map['title'],
-//         amount: map['amount'],
-//         date: DateTime.parse(map['date']),
-//         category: map['category'],
-//         subcategory: map['subcategory'],
-//         description: map['description'],
-//       );
-// }

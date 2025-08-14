@@ -1,3 +1,6 @@
+import 'dart:collection';
+
+import 'package:expense_management_app/models/income.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hive/hive.dart';
@@ -17,14 +20,16 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   List<Expense> getFilteredExpenses() {
     final allExpenses = Hive.box<Expense>('expenses').values.toList();
-
+    
     return allExpenses.where((e) {
       final date = e.date;
       if (_dateRange == null) {
         final now = DateTime.now();
         return date.month == now.month && date.year == now.year;
       } else {
-        return date.isAfter(_dateRange!.start.subtract(const Duration(days: 1))) &&
+        return date.isAfter(
+              _dateRange!.start.subtract(const Duration(days: 1)),
+            ) &&
             date.isBefore(_dateRange!.end.add(const Duration(days: 1)));
       }
     }).toList();
@@ -50,7 +55,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       context: context,
       firstDate: DateTime(now.year - 2),
       lastDate: DateTime(now.year + 1),
-      initialDateRange: _dateRange ??
+      initialDateRange:
+          _dateRange ??
           DateTimeRange(
             start: DateTime(now.year, now.month, 1),
             end: DateTime(now.year, now.month + 1, 0),
@@ -60,15 +66,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
       setState(() => _dateRange = picked);
     }
   }
-
+ 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     final expenses = getFilteredExpenses();
     final totals = computeTotals(expenses);
     final totalAmount = totals.values.fold(0.0, (sum, val) => sum + val);
 
     final pieSections = totals.entries.map((entry) {
-      final color = Colors.primaries[entry.key.hashCode % Colors.primaries.length];
+      final color =
+          Colors.primaries[entry.key.hashCode % Colors.primaries.length];
+
       return PieChartSectionData(
         value: entry.value,
         title: entry.key.split('>').last.trim(),
@@ -91,9 +99,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
             tooltip: 'Select Date Range',
           ),
           IconButton(
-            icon: Icon(_viewSubcategories ? Icons.view_module : Icons.view_list),
-            tooltip: _viewSubcategories ? 'View by Category' : 'View by Subcategory',
-            onPressed: () => setState(() => _viewSubcategories = !_viewSubcategories),
+            icon: Icon(
+              _viewSubcategories ? Icons.view_module : Icons.view_list,
+            ),
+            tooltip: _viewSubcategories
+                ? 'View by Category'
+                : 'View by Subcategory',
+            onPressed: () =>
+                setState(() => _viewSubcategories = !_viewSubcategories),
           ),
           IconButton(
             icon: Icon(_barView ? Icons.pie_chart : Icons.bar_chart),
@@ -177,7 +190,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           gridData: FlGridData(show: true),
                           barGroups: List.generate(barSpots.length, (index) {
                             final e = barSpots[index];
-                            final color = Colors.primaries[e.key.hashCode % Colors.primaries.length];
+                            final color =
+                                Colors.primaries[e.key.hashCode %
+                                    Colors.primaries.length];
                             return BarChartGroupData(
                               x: index,
                               barRods: [
@@ -194,12 +209,17 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                       ),
                     ),
                   const SizedBox(height: 20),
-                  const Text("Breakdown", style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    "Breakdown",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const Divider(),
                   Expanded(
                     child: ListView(
                       children: totals.entries.map((entry) {
-                        final color = Colors.primaries[entry.key.hashCode % Colors.primaries.length];
+                        final color =
+                            Colors.primaries[entry.key.hashCode %
+                                Colors.primaries.length];
                         return ListTile(
                           leading: CircleAvatar(backgroundColor: color),
                           title: Text(entry.key),

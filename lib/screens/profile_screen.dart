@@ -1,27 +1,38 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:expense_management_app/models/income.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   Future<String> _getStoragePath() async {
-    final dir = await getApplicationDocumentsDirectory();
-    return dir.path;
+    if (kIsWeb) return 'assets';
+    final dir = await getDownloadsDirectory();
+
+    if (dir != null) {
+      return dir.path;
+    } else {
+      return '/storage/emulated/0/Downloads';
+    }
   }
 
   Future<void> _exportAsJson(BuildContext context) async {
     final expenseBox = Hive.box<Expense>('expenses');
     final categoryBox = Hive.box<Category>('categories');
+    final incomBox = Hive.box<Income>('incomes');
 
     final exportData = {
       'categories': categoryBox.values.map((c) => c.toMap()).toList(),
       'expenses': expenseBox.values.map((e) => e.toMap()).toList(),
+      'incomes': incomBox.values.map((e) => e.toMap()).toList(),
     };
 
     final jsonStr = jsonEncode(exportData);
@@ -29,6 +40,7 @@ class ProfileScreen extends StatelessWidget {
     final file = File('$path/expense_data.json');
     await file.writeAsString(jsonStr);
 
+    // ignore: use_build_context_synchronously
     _showMessage(context, 'Exported as JSON to:\n${file.path}');
   }
 
@@ -37,7 +49,7 @@ class ProfileScreen extends StatelessWidget {
     final expenses = expenseBox.values.toList();
 
     final rows = [
-      ['Title', 'Amount', 'Date', 'Category', 'Subcategory', 'Description']
+      ['Title', 'Amount', 'Date', 'Category', 'Subcategory', 'Description'],
     ];
 
     for (final e in expenses) {
@@ -47,12 +59,14 @@ class ProfileScreen extends StatelessWidget {
         e.date.toIso8601String(),
         e.category,
         e.subcategory ?? '',
-        e.description ?? ''
+        e.description ?? '',
+        e.fromIncomeSource ?? '',
       ]);
     }
 
     final csvStr = const ListToCsvConverter().convert(rows);
     final path = await _getStoragePath();
+
     final file = File('$path/expense_data.csv');
     await file.writeAsString(csvStr);
 
@@ -63,17 +77,25 @@ class ProfileScreen extends StatelessWidget {
     final path = await _getStoragePath();
     final file = File('$path/expense_data.json');
 
-    if (!file.existsSync()) {
+    if (!kIsWeb && !file.existsSync()) {
       _showMessage(context, 'JSON file not found at:\n${file.path}');
       return;
     }
 
     try {
-      final content = await file.readAsString();
+      final content = kIsWeb
+          ? await rootBundle.loadString('$path/expense_data.json')
+          : await file.readAsString();
       final decoded = jsonDecode(content);
 
       final categoryBox = Hive.box<Category>('categories');
       final expenseBox = Hive.box<Expense>('expenses');
+      final incomeBox = Hive.box<Income>('incomes');
+      // print(decoded);
+
+      await categoryBox.clear();
+      await expenseBox.clear();
+      await incomeBox.clear();
 
       for (var c in decoded['categories']) {
         categoryBox.add(Category.fromMap(c));
@@ -81,50 +103,71 @@ class ProfileScreen extends StatelessWidget {
       for (var e in decoded['expenses']) {
         expenseBox.add(Expense.fromMap(e));
       }
-
+      print(decoded['incomes']);
+      for (var i in decoded['incomes']) {
+        incomeBox.add(Income.fromMap(i));
+      }
       _showMessage(context, 'Imported data from JSON:\n${file.path}');
     } catch (e) {
       _showMessage(context, 'JSON import failed: $e');
     }
   }
 
-  Future<void> _importFromCsvFile(BuildContext context) async {
-    final path = await _getStoragePath();
-    final file = File('$path/expense_data.csv');
+  void _showMessage(BuildContext context, String msg, {bool isError = false}) {
+    final colorScheme = Theme.of(context).colorScheme;
 
-    if (!file.existsSync()) {
-      _showMessage(context, 'CSV file not found at:\n${file.path}');
-      return;
-    }
+    final backgroundColor = isError
+        ? Colors.redAccent
+        : colorScheme.primaryContainer;
 
-    try {
-      final content = await file.readAsString();
-      final rows = const CsvToListConverter().convert(content);
+    final icon = isError ? Icons.error_outline : Icons.check_circle_outline;
 
-      final expenseBox = Hive.box<Expense>('expenses');
-      for (int i = 1; i < rows.length; i++) {
-        final row = rows[i];
-        final expense = Expense(
-          title: row[0].toString(),
-          amount: double.tryParse(row[1].toString()) ?? 0,
-          date: DateTime.parse(row[2].toString()),
-          category: row[3].toString(),
-          subcategory: row[4].toString(),
-          description: row[5].toString(),
-        );
-        expenseBox.add(expense);
-      }
-
-      _showMessage(context, 'Imported data from CSV:\n${file.path}');
-    } catch (e) {
-      _showMessage(context, 'CSV import failed: $e');
-    }
-  }
-
-  void _showMessage(BuildContext context, String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg, maxLines: 5, overflow: TextOverflow.ellipsis)),
+    final snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isError ? Colors.white : colorScheme.onPrimaryContainer,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                msg,
+                style: TextStyle(
+                  color: isError
+                      ? Colors.white
+                      : colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+      duration: const Duration(seconds: 3),
     );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   @override
@@ -143,23 +186,22 @@ class ProfileScreen extends StatelessWidget {
               label: const Text('Export as JSON'),
               onPressed: () => _exportAsJson(context),
             ),
+            SizedBox(height: 8,),
             ElevatedButton.icon(
               icon: const Icon(Icons.file_download),
               label: const Text('Export as CSV'),
               onPressed: () => _exportAsCsv(context),
             ),
             const SizedBox(height: 24),
-            const Text('Data Import (place file in app folder)', style: TextStyle(fontSize: 18)),
+            const Text(
+              'Data Import (place file in app folder)',
+              style: TextStyle(fontSize: 18),
+            ),
             const SizedBox(height: 8),
             ElevatedButton.icon(
               icon: const Icon(Icons.file_upload),
               label: const Text('Import JSON'),
               onPressed: () => _importFromJsonFile(context),
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.file_upload),
-              label: const Text('Import CSV'),
-              onPressed: () => _importFromCsvFile(context),
             ),
           ],
         ),

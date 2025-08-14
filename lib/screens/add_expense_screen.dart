@@ -1,3 +1,4 @@
+import 'package:expense_management_app/models/income.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/expense.dart';
@@ -20,27 +21,34 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   DateTime _date = DateTime.now();
   Category? _selectedCategory;
   String? _subcategory;
+  String? _selectedIncomeSource;
 
   @override
   void initState() {
     super.initState();
     final categories = Hive.box<Category>('categories').values.toList();
+    final incomes = Hive.box<Income>('incomes').values.toList();
 
     if (categories.isNotEmpty) {
       _selectedCategory = categories.first;
     }
 
+    if (incomes.isNotEmpty) {
+      _selectedIncomeSource = incomes.where((i) => i.isDefault).first.source;
+    }
     if (widget.existingExpense != null) {
       final e = widget.existingExpense!;
       _title.text = e.title;
       _amount.text = e.amount.toString();
-      _description.text = e.description ?? '';
+      _description.text = e.description;
       _date = e.date;
       _selectedCategory = categories.firstWhere(
         (c) => c.name == e.category,
         orElse: () => categories.first,
       );
       _subcategory = e.subcategory;
+      _selectedIncomeSource = e.fromIncomeSource!.isNotEmpty? e.fromIncomeSource: incomes.where((i) => i.isDefault).first.source;
+      
     }
   }
 
@@ -52,8 +60,20 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       amount: double.parse(_amount.text),
       date: _date,
       category: _selectedCategory!.name,
-      subcategory: _subcategory ?? ((_selectedCategory!.subcategories.isNotEmpty)?_selectedCategory!.subcategories.first : ''),
+      subcategory:
+          _subcategory ??
+          ((_selectedCategory!.subcategories.isNotEmpty)
+              ? _selectedCategory!.subcategories.first
+              : ''),
       description: _description.text,
+      fromIncomeSource:
+          _selectedIncomeSource ??
+          Hive.box<Income>('incomes').values
+              .firstWhere(
+                (i) => i.isDefault,
+                orElse: () => Income(source: '', amount: 0.0),
+              )
+              .source,
     );
 
     final box = Hive.box<Expense>('expenses');
@@ -70,6 +90,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     final categories = Hive.box<Category>('categories').values.toList();
+    final incomeBox = Hive.box<Income>('incomes');
+    final incomeSources = incomeBox.values.map((i) => i.source).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -156,6 +178,27 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           )
                           .toList(),
                       onChanged: (val) => setState(() => _subcategory = val),
+                    ),
+                  const SizedBox(height: 12),
+                  if (incomeSources.isNotEmpty)
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'Spent From',
+                        prefixIcon: Icon(Icons.wallet),
+                      ),
+                      value: _selectedIncomeSource,
+                      items: incomeSources
+                          .map(
+                            (src) =>
+                                DropdownMenuItem(value: src, child: Text(src)),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedIncomeSource = value;
+                          print(_selectedIncomeSource);
+                        });
+                      },
                     ),
                   if (_selectedCategory != null &&
                       _selectedCategory!.subcategories.isNotEmpty)

@@ -25,7 +25,7 @@ class ExpenseTile extends StatelessWidget {
           Row(
             children: [
               Text(
-                expense.description ?? '',
+                expense.description,
                 style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
               Text(

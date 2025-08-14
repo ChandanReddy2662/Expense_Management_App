@@ -1,5 +1,7 @@
+import 'package:expense_management_app/models/income.dart';
 import 'package:expense_management_app/screens/analytics_screen.dart';
 import 'package:expense_management_app/screens/category_manager_screen.dart';
+import 'package:expense_management_app/screens/income_screen.dart';
 import 'package:expense_management_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -12,9 +14,11 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ExpenseAdapter());
   Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(IncomeAdapter());
 
   await Hive.openBox<Category>('categories');
   await Hive.openBox<Expense>('expenses');
+  await Hive.openBox<Income>('incomes');
   createDefaultCategories();
   runApp(const ExpenseManagerApp());
 }
@@ -50,7 +54,8 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const CategoryManagerScreen(),
-    const ProfileScreen()
+    const ProfileScreen(),
+    const IncomeScreen(),
   ];
 
   @override
@@ -81,6 +86,7 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
               icon: Icon(Icons.person_pin),
               label: "Profile",
             ),
+            NavigationDestination(icon: Icon(Icons.wallet), label: "Wallet"),
           ],
         ),
       ),
