@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _pickCategoryFilter() async {
     final categoryBox = Hive.box<Category>('categories');
     final categories = ['All', ...categoryBox.values.map((c) => c.name)];
+
     final selected = await showDialog<String>(
       context: context,
       builder: (_) => AlertDialog(
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Calculate total spent in current month
     final now = DateTime.now();
-    final totalSpent = expenseBox.values
+    var totalSpent = expenseBox.values
         .where((e) => e.date.month == now.month && e.date.year == now.year)
         .fold(0.0, (sum, e) => sum + e.amount);
 
@@ -159,8 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Default Income: ₹${defaultIncome.amount.toStringAsFixed(2)}",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.bold
-                    
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -168,12 +168,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Total Spent this month: ₹${totalSpent.toStringAsFixed(2)}",
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-          
           ),
           const Divider(height: 1),
 
@@ -226,39 +225,96 @@ class _HomeScreenState extends State<HomeScreen> {
                     }).toList()..sort(
                       (a, b) => b.value.date.compareTo(a.value.date),
                     );
-
-                if (filtered.isEmpty) {
-                  return const Center(child: Text('No matching expenses.'));
-                }
-
-                return ListView.builder(
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    final expense = filtered[index].value;
-                    final key = filtered[index].key;
-
-                    final category = categoryBox.values.firstWhere(
-                      (c) => c.name == expense.category,
-                      orElse: () => Category(
-                        name: 'General',
-                        iconCode: Icons.category.codePoint,
-                      ),
+                final curDate = DateTime.now();
+                // 🔹 Recalculate totalSpent based on filtered list
+                final totalSpent = filtered
+                    .where(
+                      (exp) => selectedDateRange == null
+                          ? (exp.value.date.isAfter(
+                                  DateTime(
+                                    curDate.year,
+                                    curDate.month,
+                                    1,
+                                  ).subtract(Duration(days: 1)),
+                                ) &&
+                                exp.value.date.isBefore(
+                                  DateTime.now().add(Duration(days: 1)),
+                                ))
+                          : (exp.value.date.isAfter(
+                                  selectedDateRange!.start.subtract(
+                                    Duration(days: 1),
+                                  ),
+                                ) &&
+                                exp.value.date.isBefore(
+                                  selectedDateRange!.end.add(Duration(days: 1)),
+                                )),
+                    )
+                    .fold<double>(
+                      0.0,
+                      (sum, entry) => sum + entry.value.amount,
                     );
-
-                    return ExpenseTile(
-                      expense: expense,
-                      onDelete: () => expenseBox.delete(key),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => AddExpenseScreen(
-                            existingExpense: expense,
-                            index: key,
-                          ),
+                // 🔹 Update the summary bar with filtered total
+                return Column(
+                  children: [
+                    if (selectedCategory != 'All')
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              "Total Spent: ₹${totalSpent.toStringAsFixed(2)}",
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimaryContainer,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
+                    const Divider(height: 1),
+
+                    // ==== Expense list ====
+                    Expanded(
+                      child: filtered.isEmpty
+                          ? const Center(child: Text('No matching expenses.'))
+                          : ListView.builder(
+                              itemCount: filtered.length,
+                              itemBuilder: (context, index) {
+                                final expense = filtered[index].value;
+                                final key = filtered[index].key;
+
+                                final category = categoryBox.values.firstWhere(
+                                  (c) => c.name == expense.category,
+                                  orElse: () => Category(
+                                    name: 'General',
+                                    iconCode: Icons.category.codePoint,
+                                  ),
+                                );
+
+                                return ExpenseTile(
+                                  expense: expense,
+                                  onDelete: () => expenseBox.delete(key),
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => AddExpenseScreen(
+                                        existingExpense: expense,
+                                        index: key,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
                 );
               },
             ),
