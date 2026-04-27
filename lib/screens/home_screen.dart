@@ -19,6 +19,19 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTimeRange? selectedDateRange;
   bool showSearch = false;
 
+  DateTime _startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  DateTime _endOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
+  }
+
+  bool _isInDateRange(DateTime date, DateTimeRange range) {
+    return !date.isBefore(_startOfDay(range.start)) &&
+        !date.isAfter(_endOfDay(range.end));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,10 +88,61 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _confirmDeleteExpense(dynamic key, Expense expense) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Expense?'),
+        content: Text(
+          'Do you really want to delete "${expense.title}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await Hive.box<Expense>('expenses').delete(key);
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> _openExpenseForm({
+    Expense? existingExpense,
+    dynamic index,
+  }) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AddExpenseScreen(
+          existingExpense: existingExpense,
+          index: index,
+        ),
+      ),
+    );
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final expenseBox = Hive.box<Expense>('expenses');
-    final categoryBox = Hive.box<Category>('categories');
     final incomeBox = Hive.box<Income>('incomes');
 
     // Get default income (assuming you have a field like `isDefault` in your Income model)
@@ -192,8 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // Date filter
                       if (selectedDateRange != null) {
-                        if (e.date.isBefore(selectedDateRange!.start) ||
-                            e.date.isAfter(selectedDateRange!.end)) {
+                        if (!_isInDateRange(e.date, selectedDateRange!)) {
                           return false;
                         }
                       } else {
@@ -240,13 +303,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 exp.value.date.isBefore(
                                   DateTime.now().add(Duration(days: 1)),
                                 ))
-                          : (exp.value.date.isAfter(
-                                  selectedDateRange!.start.subtract(
-                                    Duration(days: 1),
-                                  ),
+                              : (exp.value.date.isAfter(
+                                  _startOfDay(selectedDateRange!.start)
+                                      .subtract(Duration(milliseconds: 1)),
                                 ) &&
                                 exp.value.date.isBefore(
-                                  selectedDateRange!.end.add(Duration(days: 1)),
+                                  _endOfDay(selectedDateRange!.end)
+                                      .add(Duration(milliseconds: 1)),
                                 )),
                     )
                     .fold<double>(
@@ -290,25 +353,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final expense = filtered[index].value;
                                 final key = filtered[index].key;
 
-                                final category = categoryBox.values.firstWhere(
-                                  (c) => c.name == expense.category,
-                                  orElse: () => Category(
-                                    name: 'General',
-                                    iconCode: Icons.category.codePoint,
-                                  ),
-                                );
-
                                 return ExpenseTile(
                                   expense: expense,
-                                  onDelete: () => expenseBox.delete(key),
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => AddExpenseScreen(
-                                        existingExpense: expense,
-                                        index: key,
-                                      ),
-                                    ),
+                                  onDelete: () {
+                                    _confirmDeleteExpense(key, expense);
+                                  },
+                                  onTap: () => _openExpenseForm(
+                                    existingExpense: expense,
+                                    index: key,
                                   ),
                                 );
                               },
@@ -322,10 +374,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const AddExpenseScreen()),
-        ),
+        onPressed: () {
+          _openExpenseForm();
+        },
         child: const Icon(Icons.add),
       ),
     );

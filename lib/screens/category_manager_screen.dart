@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/category.dart';
+import '../models/expense.dart';
 
 class CategoryManagerScreen extends StatefulWidget {
   const CategoryManagerScreen({super.key});
@@ -11,8 +12,8 @@ class CategoryManagerScreen extends StatefulWidget {
 
 class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
   final _nameController = TextEditingController();
-  final _subcategoryController = TextEditingController();
   final _budgetController = TextEditingController();
+  final Map<dynamic, TextEditingController> _subcategoryControllers = {};
   IconData _selectedIcon = Icons.category;
   bool _showForm = false;
 
@@ -45,9 +46,21 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
     setState(() {});
   }
 
-  void _addSubcategory(Category category, int index) {
-    final name = _subcategoryController.text.trim();
+  TextEditingController _subcategoryControllerFor(dynamic key) {
+    return _subcategoryControllers.putIfAbsent(
+      key,
+      () => TextEditingController(),
+    );
+  }
+
+  void _addSubcategory(Category category, int index, dynamic key) {
+    final controller = _subcategoryControllerFor(key);
+    final name = controller.text.trim();
     if (name.isEmpty) return;
+    if (category.subcategories
+        .any((sub) => sub.toLowerCase() == name.toLowerCase())) {
+      return;
+    }
 
     final box = Hive.box<Category>('categories');
 
@@ -59,8 +72,59 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
     );
 
     box.putAt(index, updated);
-    _subcategoryController.clear();
+    controller.clear();
     setState(() {});
+  }
+
+  Future<void> _deleteCategory(Box<Category> box, int index) async {
+    final category = box.getAt(index);
+    if (category == null) return;
+
+    final hasExpenses = Hive.box<Expense>('expenses').values.any(
+      (expense) => expense.category == category.name,
+    );
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Category?'),
+        content: Text(
+          hasExpenses
+              ? '"${category.name}" is used by existing expenses. Delete it anyway? Existing expenses will keep this category name.'
+              : 'Do you really want to delete "${category.name}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      final key = box.keyAt(index);
+      await box.deleteAt(index);
+      _subcategoryControllers.remove(key)?.dispose();
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _budgetController.dispose();
+    for (final controller in _subcategoryControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   void _deleteSubcategory(Category category, int categoryIndex, int subIndex) {
@@ -151,6 +215,9 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
                     itemCount: box.length,
                     itemBuilder: (_, index) {
                       final c = box.getAt(index)!;
+                      final key = box.keyAt(index);
+                      final subcategoryController =
+                          _subcategoryControllerFor(key);
                       return Card(
                         elevation: 2,
                         margin: const EdgeInsets.symmetric(vertical: 6),
@@ -189,7 +256,7 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
                               children: [
                                 Expanded(
                                   child: TextField(
-                                    controller: _subcategoryController,
+                                    controller: subcategoryController,
                                     decoration: const InputDecoration(
                                       labelText: 'Add Subcategory',
                                     ),
@@ -197,7 +264,8 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.add),
-                                  onPressed: () => _addSubcategory(c, index),
+                                  onPressed: () =>
+                                      _addSubcategory(c, index, key),
                                 ),
                               ],
                             ),
@@ -206,7 +274,7 @@ class _CategoryManagerScreenState extends State<CategoryManagerScreen> {
                               child: TextButton.icon(
                                 icon: const Icon(Icons.delete, color: Colors.red),
                                 label: const Text(''),
-                                onPressed: () => box.deleteAt(index),
+                                onPressed: () => _deleteCategory(box, index),
                               ),
                             ),
                           ],

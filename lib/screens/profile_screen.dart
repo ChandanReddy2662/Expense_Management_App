@@ -1,116 +1,111 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:expense_management_app/models/income.dart';
+import 'package:expense_management_app/service/file_service.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:csv/csv.dart';
-import '../models/expense.dart';
-import '../models/category.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  ProfileScreen({super.key});
 
-  Future<String> _getStoragePath() async {
-    if (kIsWeb) return 'assets';
-    final dir = await getDownloadsDirectory();
+  final FileService _fileService = FileService();
 
-    if (dir != null) {
-      return dir.path;
-    } else {
-      return '/storage/emulated/0/Downloads';
+  Future<void> _showImportModeDialog(
+    BuildContext context,
+    PickedImportFile file,
+  ) async {
+    if (!file.isJson && !file.isCsv) {
+      _showMessage(context, 'Please select a JSON or CSV file', isError: true);
+      return;
+    }
+
+    final mode = await showDialog<ImportMode>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Import Mode'),
+        content: const Text(
+          'How would you like to handle existing data?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImportMode.merge),
+            child: const Text('Merge'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImportMode.replace),
+            child: const Text('Replace All'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, ImportMode.skip),
+            child: const Text('Skip Duplicates'),
+          ),
+        ],
+      ),
+    );
+
+    if (mode == null) return;
+
+    try {
+      ImportResult result;
+      if (file.isJson) {
+        result = await _fileService.importFromJson(file, mode);
+      } else {
+        result = await _fileService.importFromCsv(file, mode);
+      }
+
+      if (context.mounted) {
+        final message =
+            'Imported: ${result.imported}, Updated: ${result.replaced}, Skipped: ${result.skipped}';
+        if (result.errors.isNotEmpty) {
+          _showMessage(
+            context,
+            '$message\nErrors: ${result.errors.length}',
+            isError: result.imported == 0 && result.replaced == 0,
+          );
+        } else {
+          _showMessage(context, message);
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        _showMessage(context, 'Import failed: $e', isError: true);
+      }
+    }
+  }
+
+  Future<void> _importExpenses(BuildContext context) async {
+    final file = await _fileService.pickFileForImport();
+    if (file == null) return;
+
+    if (context.mounted) {
+      await _showImportModeDialog(context, file);
     }
   }
 
   Future<void> _exportAsJson(BuildContext context) async {
-    final expenseBox = Hive.box<Expense>('expenses');
-    final categoryBox = Hive.box<Category>('categories');
-    final incomBox = Hive.box<Income>('incomes');
-
-    final exportData = {
-      'categories': categoryBox.values.map((c) => c.toMap()).toList(),
-      'expenses': expenseBox.values.map((e) => e.toMap()).toList(),
-      'incomes': incomBox.values.map((e) => e.toMap()).toList(),
-    };
-
-    final jsonStr = jsonEncode(exportData);
-    final path = await _getStoragePath();
-    final file = File('$path/expense_data.json');
-    await file.writeAsString(jsonStr);
-
-    // ignore: use_build_context_synchronously
-    _showMessage(context, 'Exported as JSON to:\n${file.path}');
+    final result = await _fileService.exportToJson();
+    if (context.mounted) {
+      if (result.success) {
+        _showMessage(context, _exportMessage(result, 'JSON'));
+      } else {
+        _showMessage(context, 'Export failed', isError: true);
+      }
+    }
   }
 
   Future<void> _exportAsCsv(BuildContext context) async {
-    final expenseBox = Hive.box<Expense>('expenses');
-    final expenses = expenseBox.values.toList();
-
-    final rows = [
-      ['Title', 'Amount', 'Date', 'Category', 'Subcategory', 'Description'],
-    ];
-
-    for (final e in expenses) {
-      rows.add([
-        e.title,
-        e.amount.toString(),
-        e.date.toIso8601String(),
-        e.category,
-        e.subcategory ?? '',
-        e.description ?? '',
-        e.fromIncomeSource ?? '',
-      ]);
+    final result = await _fileService.exportToCsv();
+    if (context.mounted) {
+      if (result.success) {
+        _showMessage(context, _exportMessage(result, 'CSV'));
+      } else {
+        _showMessage(context, 'Export failed', isError: true);
+      }
     }
-
-    final csvStr = const ListToCsvConverter().convert(rows);
-    final path = await _getStoragePath();
-
-    final file = File('$path/expense_data.csv');
-    await file.writeAsString(csvStr);
-
-    _showMessage(context, 'Exported as CSV to:\n${file.path}');
   }
 
-  Future<void> _importFromJsonFile(BuildContext context) async {
-    final path = await _getStoragePath();
-    final file = File('$path/expense_data.json');
-
-    if (!kIsWeb && !file.existsSync()) {
-      _showMessage(context, 'JSON file not found at:\n${file.path}');
-      return;
+  String _exportMessage(ExportResult result, String type) {
+    if (result.path == null || result.path!.isEmpty) {
+      return '$type export started';
     }
 
-    try {
-      final content = kIsWeb
-          ? await rootBundle.loadString('$path/expense_data.json')
-          : await file.readAsString();
-      final decoded = jsonDecode(content);
-
-      final categoryBox = Hive.box<Category>('categories');
-      final expenseBox = Hive.box<Expense>('expenses');
-      final incomeBox = Hive.box<Income>('incomes');
-      // print(decoded);
-
-      await categoryBox.clear();
-      await expenseBox.clear();
-      await incomeBox.clear();
-
-      for (var c in decoded['categories']) {
-        categoryBox.add(Category.fromMap(c));
-      }
-      for (var e in decoded['expenses']) {
-        expenseBox.add(Expense.fromMap(e));
-      }
-      print(decoded['incomes']);
-      for (var i in decoded['incomes']) {
-        incomeBox.add(Income.fromMap(i));
-      }
-      _showMessage(context, 'Imported data from JSON:\n${file.path}');
-    } catch (e) {
-      _showMessage(context, 'JSON import failed: $e');
-    }
+    return 'Exported to:\n${result.path}';
   }
 
   void _showMessage(BuildContext context, String msg, {bool isError = false}) {
@@ -194,14 +189,14 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             const Text(
-              'Data Import (place file in app folder)',
+              'Data Import',
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 8),
             ElevatedButton.icon(
               icon: const Icon(Icons.file_upload),
-              label: const Text('Import JSON'),
-              onPressed: () => _importFromJsonFile(context),
+              label: const Text('Import from File'),
+              onPressed: () => _importExpenses(context),
             ),
           ],
         ),

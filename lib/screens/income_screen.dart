@@ -5,6 +5,123 @@ import '../models/income.dart';
 class IncomeScreen extends StatelessWidget {
   const IncomeScreen({super.key});
 
+  Future<void> _showAddIncomeDialog(
+    BuildContext context,
+    Box<Income> incomeBox,
+  ) async {
+    final sourceController = TextEditingController();
+    final amountController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    try {
+      await showDialog<void>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text('Add Income'),
+            content: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: sourceController,
+                    decoration: const InputDecoration(labelText: 'Source'),
+                    validator: (value) =>
+                        value == null || value.trim().isEmpty
+                            ? 'Required'
+                            : null,
+                  ),
+                  TextFormField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Amount'),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Required';
+                      }
+                      if (double.tryParse(value.trim()) == null) {
+                        return 'Enter a valid amount';
+                      }
+                      return null;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.pop(context),
+              ),
+              ElevatedButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  if (!formKey.currentState!.validate()) return;
+
+                  final income = Income(
+                    source: sourceController.text.trim(),
+                    amount: double.parse(amountController.text.trim()),
+                    isDefault: incomeBox.isEmpty,
+                  );
+                  incomeBox.add(income);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      sourceController.dispose();
+      amountController.dispose();
+    }
+  }
+
+  Future<void> _deleteIncome(
+    BuildContext context,
+    Box<Income> box,
+    int index,
+  ) async {
+    final income = box.getAt(index);
+    if (income == null) return;
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Income?'),
+        content: Text('Do you really want to delete "${income.source}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true) return;
+
+    final wasDefault = income.isDefault;
+    await income.delete();
+
+    if (wasDefault && box.isNotEmpty) {
+      final firstIncome = box.getAt(0);
+      if (firstIncome != null) {
+        firstIncome.isDefault = true;
+        await firstIncome.save();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final incomeBox = Hive.box<Income>('incomes');
@@ -43,7 +160,7 @@ class IncomeScreen extends StatelessWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: () => income.delete(),
+                      onPressed: () => _deleteIncome(context, box, index),
                     ),
                   ],
                 ),
@@ -54,50 +171,7 @@ class IncomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              final sourceController = TextEditingController();
-              final amountController = TextEditingController();
-              return AlertDialog(
-                title: const Text('Add Income'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: sourceController,
-                      decoration: const InputDecoration(labelText: 'Source'),
-                    ),
-                    TextField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(labelText: 'Amount'),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  ElevatedButton(
-                    child: const Text('Save'),
-                    onPressed: () {
-                      final income = Income(
-                        source: sourceController.text,
-                        amount: double.tryParse(amountController.text) ?? 0.0,
-                        isDefault: incomeBox.isEmpty
-                      );
-                      incomeBox.add(income);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        onPressed: () => _showAddIncomeDialog(context, incomeBox),
       ),
     );
   }

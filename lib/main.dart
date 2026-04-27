@@ -36,7 +36,6 @@ void createDefaultCategories() {
     for (final cat in defaultCategories) {
       box.add(cat);
     }
-    print(box.values);
   }
 }
 
@@ -54,7 +53,7 @@ class _ExpenseManagerAppState extends State<ExpenseManagerApp> {
     const HomeScreen(),
     const AnalyticsScreen(),
     const CategoryManagerScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
     const IncomeScreen(),
   ];
 

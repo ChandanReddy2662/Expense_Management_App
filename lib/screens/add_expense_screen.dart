@@ -6,7 +6,7 @@ import '../models/category.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   final Expense? existingExpense;
-  final int? index;
+  final dynamic index;
   const AddExpenseScreen({super.key, this.existingExpense, this.index});
 
   @override
@@ -22,6 +22,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Category? _selectedCategory;
   String? _subcategory;
   String? _selectedIncomeSource;
+  bool _isSaving = false;
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     }
 
     if (incomes.isNotEmpty) {
-      _selectedIncomeSource = incomes.where((i) => i.isDefault).first.source;
+      _selectedIncomeSource = _defaultIncomeSource(incomes);
     }
     if (widget.existingExpense != null) {
       final e = widget.existingExpense!;
@@ -44,47 +45,84 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _date = e.date;
       _selectedCategory = categories.firstWhere(
         (c) => c.name == e.category,
-        orElse: () => categories.first,
+        orElse: () => Category(
+          name: e.category,
+          iconCode: Icons.category.codePoint,
+          subcategories: e.subcategory.isEmpty ? [] : [e.subcategory],
+        ),
       );
       _subcategory = e.subcategory;
-      _selectedIncomeSource = e.fromIncomeSource!.isNotEmpty? e.fromIncomeSource: incomes.where((i) => i.isDefault).first.source;
-      
+      _selectedIncomeSource = (e.fromIncomeSource?.isNotEmpty ?? false)
+          ? e.fromIncomeSource
+          : _defaultIncomeSource(incomes);
     }
   }
 
-  void _save() {
+  String? _defaultIncomeSource(List<Income> incomes) {
+    if (incomes.isEmpty) return null;
+
+    final defaultIncome = incomes.where((income) => income.isDefault);
+    return defaultIncome.isNotEmpty
+        ? defaultIncome.first.source
+        : incomes.first.source;
+  }
+
+  @override
+  void dispose() {
+    _title.dispose();
+    _amount.dispose();
+    _description.dispose();
+    super.dispose();
+  }
+
+  void _save() async {
+    if (_isSaving) return;
     if (!_formKey.currentState!.validate() || _selectedCategory == null) return;
 
-    final newExpense = Expense(
-      title: _title.text,
-      amount: double.parse(_amount.text),
-      date: _date,
-      category: _selectedCategory!.name,
-      subcategory:
-          _subcategory ??
-          ((_selectedCategory!.subcategories.isNotEmpty)
-              ? _selectedCategory!.subcategories.first
-              : ''),
-      description: _description.text,
-      fromIncomeSource:
-          _selectedIncomeSource ??
-          Hive.box<Income>('incomes').values
-              .firstWhere(
-                (i) => i.isDefault,
-                orElse: () => Income(source: '', amount: 0.0),
-              )
-              .source,
-    );
+    setState(() {
+      _isSaving = true;
+    });
 
-    final box = Hive.box<Expense>('expenses');
+    try {
+      // Preserve existing ID when editing, generate new one for new expenses
+      final expenseId = widget.existingExpense?.id ??
+          DateTime.now().microsecondsSinceEpoch.toString();
+      final incomes = Hive.box<Income>('incomes').values.toList();
 
-    if (widget.index != null) {
-      box.putAt(widget.index!, newExpense);
-    } else {
-      box.add(newExpense);
+      final newExpense = Expense(
+        id: expenseId,
+        title: _title.text.trim(),
+        amount: double.parse(_amount.text.trim()),
+        date: _date,
+        category: _selectedCategory!.name,
+        subcategory:
+            _subcategory ??
+            ((_selectedCategory!.subcategories.isNotEmpty)
+                ? _selectedCategory!.subcategories.first
+                : ''),
+        description: _description.text.trim(),
+        fromIncomeSource:
+            _selectedIncomeSource ?? _defaultIncomeSource(incomes) ?? '',
+      );
+
+      final box = Hive.box<Expense>('expenses');
+
+      if (widget.index != null) {
+        await box.put(widget.index, newExpense);
+      } else {
+        await box.add(newExpense);
+      }
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
     }
-
-    Navigator.pop(context);
   }
 
   @override
@@ -92,6 +130,19 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     final categories = Hive.box<Category>('categories').values.toList();
     final incomeBox = Hive.box<Income>('incomes');
     final incomeSources = incomeBox.values.map((i) => i.source).toList();
+    final formCategories = [...categories];
+    if (_selectedCategory != null &&
+        !formCategories.any((category) => category.name == _selectedCategory!.name)) {
+      formCategories.insert(0, _selectedCategory!);
+    }
+    final selectedCategoryValue = _selectedCategory == null
+        ? null
+        : formCategories.firstWhere(
+            (category) => category.name == _selectedCategory!.name,
+          );
+    final selectedIncomeValue = incomeSources.contains(_selectedIncomeSource)
+        ? _selectedIncomeSource
+        : null;
 
     return Scaffold(
       appBar: AppBar(
@@ -118,7 +169,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       labelText: 'Title',
                       prefixIcon: Icon(Icons.title),
                     ),
-                    validator: (val) => val!.isEmpty ? 'Required' : null,
+                    validator: (val) =>
+                        val == null || val.trim().isEmpty ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -128,16 +180,24 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       labelText: 'Amount',
                       prefixIcon: Icon(Icons.currency_rupee),
                     ),
-                    validator: (val) => val!.isEmpty ? 'Required' : null,
+                    validator: (val) {
+                      if (val == null || val.trim().isEmpty) {
+                        return 'Required';
+                      }
+                      if (double.tryParse(val.trim()) == null) {
+                        return 'Enter a valid amount';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 12),
                   DropdownButtonFormField<Category>(
-                    value: _selectedCategory,
+                    value: selectedCategoryValue,
                     decoration: const InputDecoration(
                       labelText: 'Category',
                       prefixIcon: Icon(Icons.category),
                     ),
-                    items: categories
+                    items: formCategories
                         .map(
                           (c) => DropdownMenuItem(
                             value: c,
@@ -157,6 +217,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         _subcategory = null;
                       });
                     },
+                    validator: (val) =>
+                        val == null ? 'Select a category' : null,
                   ),
                   const SizedBox(height: 12),
                   if (_selectedCategory != null &&
@@ -186,7 +248,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         labelText: 'Spent From',
                         prefixIcon: Icon(Icons.wallet),
                       ),
-                      value: _selectedIncomeSource,
+                      value: selectedIncomeValue,
                       items: incomeSources
                           .map(
                             (src) =>
@@ -196,7 +258,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       onChanged: (value) {
                         setState(() {
                           _selectedIncomeSource = value;
-                          print(_selectedIncomeSource);
                         });
                       },
                     ),
@@ -223,11 +284,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
+                          final today = DateTime.now();
+                          final initialDate = _date.isAfter(today)
+                              ? today
+                              : _date;
                           final picked = await showDatePicker(
                             context: context,
-                            initialDate: _date,
+                            initialDate: initialDate,
                             firstDate: DateTime(2020),
-                            lastDate: DateTime.now(),
+                            lastDate: today,
                           );
                           if (picked != null) setState(() => _date = picked);
                         },
@@ -237,9 +302,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                   const SizedBox(height: 24),
                   FilledButton.icon(
-                    onPressed: _save,
-                    icon: const Icon(Icons.save),
-                    label: const Text('Save Expense'),
+                    onPressed: _isSaving ? null : _save,
+                    icon: _isSaving
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.save),
+                    label: Text(_isSaving ? 'Saving...' : 'Save Expense'),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),

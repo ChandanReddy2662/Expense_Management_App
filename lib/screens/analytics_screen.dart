@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:expense_management_app/models/income.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:hive/hive.dart';
@@ -17,6 +14,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   DateTimeRange? _dateRange;
   bool _viewSubcategories = false;
   bool _barView = false;
+
+  Color _colorForKey(String key) {
+    return Colors.primaries[key.hashCode.abs() % Colors.primaries.length];
+  }
 
   List<Expense> getFilteredExpenses() {
     final allExpenses = Hive.box<Expense>('expenses').values.toList();
@@ -74,8 +75,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
     final totalAmount = totals.values.fold(0.0, (sum, val) => sum + val);
 
     final pieSections = totals.entries.map((entry) {
-      final color =
-          Colors.primaries[entry.key.hashCode % Colors.primaries.length];
+      final color = _colorForKey(entry.key);
 
       return PieChartSectionData(
         value: entry.value,
@@ -158,7 +158,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             leftTitles: AxisTitles(
                               sideTitles: SideTitles(
                                 showTitles: true,
-                                interval: totalAmount / 5,
+                                interval: totalAmount <= 0
+                                    ? 1
+                                    : totalAmount / 5,
                                 reservedSize: 40,
                               ),
                             ),
@@ -190,9 +192,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                           gridData: FlGridData(show: true),
                           barGroups: List.generate(barSpots.length, (index) {
                             final e = barSpots[index];
-                            final color =
-                                Colors.primaries[e.key.hashCode %
-                                    Colors.primaries.length];
+                            final color = _colorForKey(e.key);
                             return BarChartGroupData(
                               x: index,
                               barRods: [
@@ -217,9 +217,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   Expanded(
                     child: ListView(
                       children: totals.entries.map((entry) {
-                        final color =
-                            Colors.primaries[entry.key.hashCode %
-                                Colors.primaries.length];
+                        final color = _colorForKey(entry.key);
                         return ListTile(
                           leading: CircleAvatar(backgroundColor: color),
                           title: Text(entry.key),

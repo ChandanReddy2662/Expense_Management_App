@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 part 'income.g.dart';
@@ -17,18 +16,20 @@ class Income extends HiveObject {
   Income({required this.source, required this.amount, this.isDefault = false});
 
   factory Income.fromMap(Map<String, dynamic> map) {
-    if (kDebugMode) {
-      print("$map  ${map['source']} ${map['amount']} ${map['isDefault']}");
-    }
     return Income(
-      source: map['source'],
-      amount: map['amount'],
-      isDefault: map['isDefault'],
+      source: map['source']?.toString() ?? '',
+      amount: _toDouble(map['amount']),
+      isDefault: map['isDefault'] == true,
     );
   }
 
   // 👇 Optional: for exporting
   Map<String, dynamic> toMap() {
     return {'source': source, 'amount': amount, 'isDefault': isDefault};
+  }
+
+  static double _toDouble(dynamic value) {
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0.0;
   }
 }

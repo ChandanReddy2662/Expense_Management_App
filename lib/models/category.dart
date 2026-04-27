@@ -27,10 +27,12 @@ class Category extends HiveObject {
 
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
-      name: map['name'],
-      iconCode: map['iconCode'],
-      budget: (map['budget'] ?? 0.0).toDouble(),
-      subcategories: List<String>.from(map['subcategories'] ?? []),
+      name: map['name']?.toString() ?? 'General',
+      iconCode: _toInt(map['iconCode']),
+      budget: _toDouble(map['budget']),
+      subcategories: (map['subcategories'] as List? ?? [])
+          .map((value) => value.toString())
+          .toList(),
     );
   }
 
@@ -44,6 +46,15 @@ class Category extends HiveObject {
     };
   }
 
+  static double _toDouble(dynamic value) {
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0.0;
+  }
+
+  static int _toInt(dynamic value) {
+    if (value is int) return value;
+    return int.tryParse(value?.toString() ?? '') ?? Icons.category.codePoint;
+  }
 }
 
 // extension CategoryMapper on Category {

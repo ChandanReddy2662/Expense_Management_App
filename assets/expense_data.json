@@ -10,7 +10,15 @@
       "name": "Food",
       "iconCode": 57946,
       "budget": 0.0,
-      "subcategories": ["Lunch", "Junk", "Tiffin", "Fruits", "Sweets", "Dinner"]
+      "subcategories": [
+        "Lunch",
+        "Junk",
+        "Tiffin",
+        "Fruits",
+        "Sweets",
+        "Dinner",
+        "Snacks"
+      ]
     },
     {
       "name": "Travel",
@@ -29,7 +37,7 @@
       "name": "Entertainment",
       "iconCode": 58636,
       "budget": 0.0,
-      "subcategories": ["Friends", "Trip"]
+      "subcategories": ["Friends", "Trip", "Devotion"]
     },
     {
       "name": "Loaning",
@@ -1866,12 +1874,364 @@
       "category": "Home",
       "subcategory": "Gifts",
       "description": ""
+    },
+    {
+      "title": "ICECREAM(bunny,  potti bunny, tinku, nikil, me)",
+      "amount": 100.0,
+      "date": "2025-08-12T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-13T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Movie-snacks",
+      "amount": 90.0,
+      "date": "2025-08-15T09:29:45.642",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "TIFFIN (me, sri,minnu)",
+      "amount": 140.0,
+      "date": "2025-08-15T11:52:37.832",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "CONDENSER ",
+      "amount": 40.0,
+      "date": "2025-08-15T20:56:56.901",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "MUNCHURIYAN (bunny, tinku, harshith, me)",
+      "amount": 230.0,
+      "date": "2025-08-17T19:23:11.593",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-18T18:43:36.733",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-18T18:43:51.101",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "MOVIE(me, minnu, sri)",
+      "amount": 400.0,
+      "date": "2025-08-15T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "metro",
+      "amount": 69.0,
+      "date": "2025-08-20T09:01:10.871",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro pass",
+      "amount": 1380.0,
+      "date": "2025-08-20T20:48:06.151",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Metro ",
+      "amount": 69.0,
+      "date": "2025-08-20T20:48:23.678",
+      "category": "Travel",
+      "subcategory": "Metro",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-21T18:44:24.244",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-21T18:44:35.075",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-22T20:35:41.929",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto ",
+      "amount": 20.0,
+      "date": "2025-08-22T20:35:51.811",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "DWhril streel(Me, Ajith, pardhu)",
+      "amount": 819.0,
+      "date": "2025-07-25T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Biryani(Me, Ajith)",
+      "amount": 380.0,
+      "date": "2025-08-22T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Dinner",
+      "description": ""
+    },
+    {
+      "title": "petrol",
+      "amount": 1234.0,
+      "date": "2025-08-24T09:15:37.715",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Snacks (Family)",
+      "amount": 70.0,
+      "date": "2025-08-24T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Snacks",
+      "description": ""
+    },
+    {
+      "title": "petrol",
+      "amount": 860.0,
+      "date": "2025-08-24T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-25T09:02:39.405",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "GANESH CHATURTHI (Chanda)",
+      "amount": 1500.0,
+      "date": "2025-08-24T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Devotion",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-29T19:37:39.917",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-29T19:37:51.862",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "TEA(me, bunny, potti bunny, tinku, yashwanth, harshith, vinod)",
+      "amount": 105.0,
+      "date": "2025-08-31T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Snacks",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-19T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-29T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Water bottles(me, rishika, sanjana, krishna, abhi, amshu)",
+      "amount": 105.0,
+      "date": "2025-08-31T00:00:00.000",
+      "category": "Entertainment",
+      "subcategory": "Friends",
+      "description": ""
+    },
+    {
+      "title": "soda",
+      "amount": 25.0,
+      "date": "2025-08-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Water bottle",
+      "amount": 20.0,
+      "date": "2025-08-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Snacks",
+      "description": ""
+    },
+    {
+      "title": "Banana",
+      "amount": 60.0,
+      "date": "2025-08-30T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Fruits",
+      "description": ""
+    },
+    {
+      "title": "BUSPASS",
+      "amount": 1430.0,
+      "date": "2025-09-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Public Transport",
+      "description": ""
+    },
+    {
+      "title": "flowers",
+      "amount": 50.0,
+      "date": "2025-08-27T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Coconut",
+      "amount": 25.0,
+      "date": "2025-08-27T00:00:00.000",
+      "category": "Home",
+      "subcategory": "Needs",
+      "description": ""
+    },
+    {
+      "title": "Tiffins",
+      "amount": 210.0,
+      "date": "2025-08-24T00:00:00.000",
+      "category": "Food",
+      "subcategory": "Tiffin",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-08-20T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-09-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-09-01T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "AUTO",
+      "amount": 20.0,
+      "date": "2025-09-02T00:00:00.000",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "Auto",
+      "amount": 20.0,
+      "date": "2025-09-03T21:55:31.258",
+      "category": "Travel",
+      "subcategory": "Auto",
+      "description": ""
+    },
+    {
+      "title": "KULFI(Tinku, bunny, me)",
+      "amount": 30.0,
+      "date": "2025-09-04T23:47:14.544",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
+    },
+    {
+      "title": "Panipuri (tinku, bunny, potti bunny, harshith, nikil, me)",
+      "amount": 120.0,
+      "date": "2025-09-04T23:47:31.968",
+      "category": "Food",
+      "subcategory": "Junk",
+      "description": ""
     }
   ],
-  "incomes":[
+  "incomes": [
     {
-      "source": "HDFC(Personal)",
-      "amount": 45200,
+      "source": "HDFC(personal expenses)",
+      "amount": 45000.0,
       "isDefault": true
     }
   ]
