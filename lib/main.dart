@@ -1,4 +1,5 @@
 import 'package:expense_management_app/models/income.dart';
+import 'package:expense_management_app/models/frequent_expense.dart';
 import 'package:expense_management_app/screens/analytics_screen.dart';
 import 'package:expense_management_app/screens/category_manager_screen.dart';
 import 'package:expense_management_app/screens/income_screen.dart';
@@ -15,10 +16,12 @@ void main() async {
   Hive.registerAdapter(ExpenseAdapter());
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(IncomeAdapter());
+  Hive.registerAdapter(FrequentExpenseAdapter());
 
   await Hive.openBox<Category>('categories');
   await Hive.openBox<Expense>('expenses');
   await Hive.openBox<Income>('incomes');
+  await Hive.openBox<FrequentExpense>('frequent_expenses');
   createDefaultCategories();
   runApp(const ExpenseManagerApp());
 }

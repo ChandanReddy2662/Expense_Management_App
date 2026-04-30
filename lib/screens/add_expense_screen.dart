@@ -3,11 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import '../models/frequent_expense.dart';
 
 class AddExpenseScreen extends StatefulWidget {
   final Expense? existingExpense;
+  final FrequentExpense? frequentExpense;
+  final dynamic frequentExpenseKey;
+  final bool editFrequentExpense;
   final dynamic index;
-  const AddExpenseScreen({super.key, this.existingExpense, this.index});
+  const AddExpenseScreen({
+    super.key,
+    this.existingExpense,
+    this.frequentExpense,
+    this.frequentExpenseKey,
+    this.editFrequentExpense = false,
+    this.index,
+  });
 
   @override
   State<AddExpenseScreen> createState() => _AddExpenseScreenState();
@@ -18,6 +29,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final _title = TextEditingController();
   final _amount = TextEditingController();
   final _description = TextEditingController();
+  final _shortcutName = TextEditingController();
   DateTime _date = DateTime.now();
   Category? _selectedCategory;
   String? _subcategory;
@@ -55,6 +67,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       _selectedIncomeSource = (e.fromIncomeSource?.isNotEmpty ?? false)
           ? e.fromIncomeSource
           : _defaultIncomeSource(incomes);
+    } else if (widget.frequentExpense != null) {
+      _shortcutName.text = widget.frequentExpense!.name;
+      _applyFrequentExpense(
+        widget.frequentExpense!,
+        resetDate: false,
+        notify: false,
+      );
     }
   }
 
@@ -72,6 +91,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     _title.dispose();
     _amount.dispose();
     _description.dispose();
+    _shortcutName.dispose();
     super.dispose();
   }
 
@@ -85,7 +105,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
 
     try {
       // Preserve existing ID when editing, generate new one for new expenses
-      final expenseId = widget.existingExpense?.id ??
+      final expenseId =
+          widget.existingExpense?.id ??
           DateTime.now().microsecondsSinceEpoch.toString();
       final incomes = Hive.box<Income>('incomes').values.toList();
 
@@ -95,11 +116,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         amount: double.parse(_amount.text.trim()),
         date: _date,
         category: _selectedCategory!.name,
-        subcategory:
-            _subcategory ??
-            ((_selectedCategory!.subcategories.isNotEmpty)
-                ? _selectedCategory!.subcategories.first
-                : ''),
+        subcategory: _resolvedSubcategory(),
         description: _description.text.trim(),
         fromIncomeSource:
             _selectedIncomeSource ?? _defaultIncomeSource(incomes) ?? '',
@@ -125,14 +142,201 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
     }
   }
 
+  Future<void> _saveFrequentExpenseChanges() async {
+    if (_isSaving) return;
+    if (!_formKey.currentState!.validate() ||
+        _selectedCategory == null ||
+        _shortcutName.text.trim().isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      final shortcut = FrequentExpense(
+        name: _shortcutName.text.trim(),
+        title: _title.text.trim(),
+        amount: double.parse(_amount.text.trim()),
+        category: _selectedCategory!.name,
+        subcategory: _resolvedSubcategory(),
+        description: _description.text.trim(),
+        fromIncomeSource: _selectedIncomeSource ?? '',
+      );
+
+      final box = Hive.box<FrequentExpense>('frequent_expenses');
+      if (widget.frequentExpenseKey != null) {
+        await box.put(widget.frequentExpenseKey, shortcut);
+      } else {
+        await box.add(shortcut);
+      }
+
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
+    }
+  }
+
+  String _resolvedSubcategory() {
+    if (_selectedCategory == null) return '';
+    if (_subcategory != null &&
+        _selectedCategory!.subcategories.contains(_subcategory)) {
+      return _subcategory!;
+    }
+    return _selectedCategory!.subcategories.isNotEmpty
+        ? _selectedCategory!.subcategories.first
+        : '';
+  }
+
+  Category _categoryForName(List<Category> categories, String categoryName) {
+    return categories.firstWhere(
+      (category) => category.name == categoryName,
+      orElse: () =>
+          Category(name: categoryName, iconCode: Icons.category.codePoint),
+    );
+  }
+
+  void _applyFrequentExpense(
+    FrequentExpense frequentExpense, {
+    bool resetDate = true,
+    bool notify = true,
+  }) {
+    final categories = Hive.box<Category>('categories').values.toList();
+    final incomes = Hive.box<Income>('incomes').values.toList();
+    final incomeSources = incomes.map((income) => income.source).toSet();
+    final category = _categoryForName(categories, frequentExpense.category);
+
+    void applyValues() {
+      _title.text = frequentExpense.title;
+      _amount.text = frequentExpense.amount.toString();
+      _description.text = frequentExpense.description;
+      _selectedCategory = category;
+      _subcategory =
+          category.subcategories.contains(frequentExpense.subcategory)
+          ? frequentExpense.subcategory
+          : null;
+      _selectedIncomeSource =
+          incomeSources.contains(frequentExpense.fromIncomeSource)
+          ? frequentExpense.fromIncomeSource
+          : _defaultIncomeSource(incomes);
+      if (resetDate) {
+        _date = DateTime.now();
+      }
+    }
+
+    if (notify) {
+      setState(applyValues);
+    } else {
+      applyValues();
+    }
+  }
+
+  Future<void> _saveAsFrequentExpense() async {
+    if (!_formKey.currentState!.validate() || _selectedCategory == null) {
+      return;
+    }
+
+    final nameController = TextEditingController(text: _title.text.trim());
+    final name = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Save Frequently Used Expense'),
+        content: TextField(
+          controller: nameController,
+          autofocus: true,
+          decoration: const InputDecoration(
+            labelText: 'Shortcut name',
+            prefixIcon: Icon(Icons.bookmark_add),
+          ),
+          textInputAction: TextInputAction.done,
+          onSubmitted: (value) => Navigator.pop(context, value.trim()),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, nameController.text.trim()),
+            child: const Text('Save Shortcut'),
+          ),
+        ],
+      ),
+    );
+    nameController.dispose();
+
+    if (name == null || name.isEmpty) return;
+
+    final shortcut = FrequentExpense(
+      name: name,
+      title: _title.text.trim(),
+      amount: double.parse(_amount.text.trim()),
+      category: _selectedCategory!.name,
+      subcategory: _resolvedSubcategory(),
+      description: _description.text.trim(),
+      fromIncomeSource: _selectedIncomeSource ?? '',
+    );
+
+    await Hive.box<FrequentExpense>('frequent_expenses').add(shortcut);
+
+    if (mounted) {
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('"$name" saved as frequently used.')),
+      );
+    }
+  }
+
+  Future<void> _deleteFrequentExpense(dynamic key, String name) async {
+    await Hive.box<FrequentExpense>('frequent_expenses').delete(key);
+    if (mounted) {
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('"$name" removed from shortcuts.')),
+      );
+    }
+  }
+
+  Future<void> _editFrequentExpense(
+    dynamic key,
+    FrequentExpense frequentExpense,
+  ) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AddExpenseScreen(
+          frequentExpense: frequentExpense,
+          frequentExpenseKey: key,
+          editFrequentExpense: true,
+        ),
+      ),
+    );
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final categories = Hive.box<Category>('categories').values.toList();
     final incomeBox = Hive.box<Income>('incomes');
+    final frequentExpenseBox = Hive.box<FrequentExpense>('frequent_expenses');
     final incomeSources = incomeBox.values.map((i) => i.source).toList();
+    final frequentExpenses = frequentExpenseBox.toMap().entries.toList()
+      ..sort((a, b) => a.value.name.compareTo(b.value.name));
     final formCategories = [...categories];
     if (_selectedCategory != null &&
-        !formCategories.any((category) => category.name == _selectedCategory!.name)) {
+        !formCategories.any(
+          (category) => category.name == _selectedCategory!.name,
+        )) {
       formCategories.insert(0, _selectedCategory!);
     }
     final selectedCategoryValue = _selectedCategory == null
@@ -144,10 +348,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         ? _selectedIncomeSource
         : null;
 
+    final isEditingFrequentExpense = widget.editFrequentExpense;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.existingExpense == null ? 'Add Expense' : 'Edit Expense',
+          isEditingFrequentExpense
+              ? 'Edit Frequently Used'
+              : widget.existingExpense == null
+              ? 'Add Expense'
+              : 'Edit Expense',
         ),
       ),
       body: Padding(
@@ -163,6 +373,18 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               key: _formKey,
               child: ListView(
                 children: [
+                  if (isEditingFrequentExpense) ...[
+                    TextFormField(
+                      controller: _shortcutName,
+                      decoration: const InputDecoration(
+                        labelText: 'Shortcut name',
+                        prefixIcon: Icon(Icons.bookmark),
+                      ),
+                      validator: (val) =>
+                          val == null || val.trim().isEmpty ? 'Required' : null,
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   TextFormField(
                     controller: _title,
                     decoration: const InputDecoration(
@@ -302,7 +524,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                   const SizedBox(height: 24),
                   FilledButton.icon(
-                    onPressed: _isSaving ? null : _save,
+                    onPressed: _isSaving
+                        ? null
+                        : isEditingFrequentExpense
+                        ? _saveFrequentExpenseChanges
+                        : _save,
                     icon: _isSaving
                         ? const SizedBox(
                             width: 18,
@@ -310,11 +536,88 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.save),
-                    label: Text(_isSaving ? 'Saving...' : 'Save Expense'),
+                    label: Text(
+                      _isSaving
+                          ? 'Saving...'
+                          : isEditingFrequentExpense
+                          ? 'Update Shortcut'
+                          : 'Save Expense',
+                    ),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                     ),
                   ),
+                  if (isEditingFrequentExpense) ...[
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: _isSaving ? null : _save,
+                      icon: const Icon(Icons.add),
+                      label: const Text('Create Expense from Shortcut'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(48),
+                      ),
+                    ),
+                  ],
+                  if (widget.existingExpense == null &&
+                      !isEditingFrequentExpense) ...[
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: _saveAsFrequentExpense,
+                      icon: const Icon(Icons.bookmark_add),
+                      label: const Text('Save as Frequently Used'),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(48),
+                      ),
+                    ),
+                    if (frequentExpenses.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        'Frequently Used',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 8),
+                      ...frequentExpenses.map((entry) {
+                        final frequentExpense = entry.value;
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: ListTile(
+                            leading: const Icon(Icons.bookmark),
+                            title: Text(frequentExpense.name),
+                            subtitle: Text(
+                              '${frequentExpense.title} - Rs. '
+                              '${frequentExpense.amount.toStringAsFixed(2)}',
+                            ),
+                            onTap: () => _applyFrequentExpense(frequentExpense),
+                            trailing: SizedBox(
+                              width: 96,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    tooltip: 'Edit shortcut',
+                                    icon: const Icon(Icons.edit_outlined),
+                                    onPressed: () => _editFrequentExpense(
+                                      entry.key,
+                                      frequentExpense,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    tooltip: 'Remove shortcut',
+                                    icon: const Icon(Icons.delete_outline),
+                                    onPressed: () => _deleteFrequentExpense(
+                                      entry.key,
+                                      frequentExpense.name,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ],
                 ],
               ),
             ),

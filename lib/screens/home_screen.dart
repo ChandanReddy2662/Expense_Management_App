@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/expense.dart';
 import '../models/category.dart';
+import '../models/frequent_expense.dart';
 import '../screens/add_expense_screen.dart';
 import '../widgets/expense_tile.dart';
 
@@ -123,6 +124,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _openExpenseForm({
     Expense? existingExpense,
+    FrequentExpense? frequentExpense,
+    dynamic frequentExpenseKey,
+    bool editFrequentExpense = false,
     dynamic index,
   }) async {
     await Navigator.push(
@@ -130,6 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(
         builder: (_) => AddExpenseScreen(
           existingExpense: existingExpense,
+          frequentExpense: frequentExpense,
+          frequentExpenseKey: frequentExpenseKey,
+          editFrequentExpense: editFrequentExpense,
           index: index,
         ),
       ),
@@ -137,6 +144,156 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  Future<void> _confirmDeleteFrequentExpense(
+    dynamic key,
+    FrequentExpense shortcut,
+  ) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Shortcut?'),
+        content: Text(
+          'Do you really want to delete "${shortcut.name}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: Theme.of(context).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await Hive.box<FrequentExpense>('frequent_expenses').delete(key);
+      if (mounted) {
+        setState(() {});
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('"${shortcut.name}" shortcut deleted.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _showFrequentExpenses() async {
+    final frequentExpenseBox = Hive.box<FrequentExpense>('frequent_expenses');
+    final shortcuts = frequentExpenseBox.toMap().entries.toList()
+      ..sort((a, b) => a.value.name.compareTo(b.value.name));
+
+    if (shortcuts.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Create a frequently used expense from Add Expense.'),
+        ),
+      );
+      return;
+    }
+
+    final selected = await showModalBottomSheet<_FrequentExpenseAction>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: ListView.separated(
+          shrinkWrap: true,
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          itemCount: shortcuts.length + 1,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  'Frequently Used Expenses',
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              );
+            }
+
+            final entry = shortcuts[index - 1];
+            final shortcut = entry.value;
+            return ListTile(
+              leading: const Icon(Icons.bookmark),
+              title: Text(shortcut.name),
+              subtitle: Text(
+                '${shortcut.title} - Rs. ${shortcut.amount.toStringAsFixed(2)}',
+              ),
+              onTap: () => Navigator.pop(
+                context,
+                _FrequentExpenseAction(
+                  type: _FrequentExpenseActionType.createExpense,
+                  key: entry.key,
+                  shortcut: shortcut,
+                ),
+              ),
+              trailing: SizedBox(
+                width: 96,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      tooltip: 'Edit shortcut',
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => Navigator.pop(
+                        context,
+                        _FrequentExpenseAction(
+                          type: _FrequentExpenseActionType.editShortcut,
+                          key: entry.key,
+                          shortcut: shortcut,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Delete shortcut',
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () => Navigator.pop(
+                        context,
+                        _FrequentExpenseAction(
+                          type: _FrequentExpenseActionType.deleteShortcut,
+                          key: entry.key,
+                          shortcut: shortcut,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
+    if (selected != null) {
+      switch (selected.type) {
+        case _FrequentExpenseActionType.createExpense:
+          await _openExpenseForm(frequentExpense: selected.shortcut);
+          break;
+        case _FrequentExpenseActionType.editShortcut:
+          await _openExpenseForm(
+            frequentExpense: selected.shortcut,
+            frequentExpenseKey: selected.key,
+            editFrequentExpense: true,
+          );
+          break;
+        case _FrequentExpenseActionType.deleteShortcut:
+          await _confirmDeleteFrequentExpense(
+            selected.key,
+            selected.shortcut,
+          );
+          break;
+      }
     }
   }
 
@@ -162,6 +319,11 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Expenses'),
         actions: [
+          IconButton(
+            tooltip: 'Frequently used expenses',
+            icon: const Icon(Icons.bookmarks),
+            onPressed: _showFrequentExpenses,
+          ),
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
@@ -381,4 +543,22 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+enum _FrequentExpenseActionType {
+  createExpense,
+  editShortcut,
+  deleteShortcut,
+}
+
+class _FrequentExpenseAction {
+  final _FrequentExpenseActionType type;
+  final dynamic key;
+  final FrequentExpense shortcut;
+
+  const _FrequentExpenseAction({
+    required this.type,
+    required this.key,
+    required this.shortcut,
+  });
 }
